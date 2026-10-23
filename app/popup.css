@@ -1,0 +1,100 @@
+.lv-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0, 20, 40, 0.62);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.lv-popup {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: #fff;
+  border-radius: var(--lv-radius);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+  padding: 32px;
+  border-top: 4px solid var(--lv-sky);
+  animation: lv-popup-in 180ms ease-out;
+}
+
+@keyframes lv-popup-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lv-popup__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--lv-muted);
+  cursor: pointer;
+  border-radius: var(--lv-radius);
+}
+
+.lv-popup__close:hover {
+  background: var(--lv-border);
+  color: var(--lv-ink);
+}
+
+.lv-popup__eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--lv-sky);
+  margin-bottom: 8px;
+}
+
+.lv-popup__title {
+  font-family: var(--font-display);
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -0.8px;
+  color: var(--lv-navy);
+  margin-bottom: 10px;
+}
+
+.lv-popup__body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--lv-muted);
+}
+
+.lv-popup__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.lv-popup__actions .lv-btn {
+  flex: 1 1 140px;
+}
+
+@media (max-width: 480px) {
+  .lv-popup {
+    padding: 24px 20px;
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+  }
+  .lv-popup__title {
+    font-size: 26px;
+  }
+}

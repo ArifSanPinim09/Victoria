@@ -1,26 +1,1024 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Lacrosse Victoria — design tokens
+   All values measured from the live site on 22 Oct 2026.
+   See docs/design-spec.md and docs/reference-audit.md.
+   ============================================================ */
+
+@font-face {
+  font-family: "ProximaNova-Black";
+  src: url("/fonts/proximanova-black.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --lv-navy: #002854;
+  --lv-navy-deep: #001c3a;
+  --lv-sky: #4ab7f3;
+  --lv-sky-hover: #2fa5e8;
+  --lv-grey: #9fa5ab;
+  --lv-grey-hover: #8c9299;
+  --lv-ink: #171717;
+  --lv-muted: #5b6570;
+  --lv-white: #ffffff;
+  --lv-border: #f8f9fa;
+  --lv-border-mid: #e4e7ea;
+  --lv-error: #c0392b;
+  --lv-error-bg: #fdf3f2;
+  --lv-success-bg: rgba(74, 183, 243, 0.06);
+
+  --lv-header-h: 88px;
+  --lv-container: 1140px;
+  --lv-radius: 4px;
+
+  --font-body: var(--font-poppins), "Helvetica Neue", Arial, sans-serif;
+  --font-display: "ProximaNova-Black", var(--font-poppins), Arial, sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-lv-navy: var(--lv-navy);
+  --color-lv-sky: var(--lv-sky);
+  --color-lv-grey: var(--lv-grey);
+  --color-lv-ink: var(--lv-ink);
+  --font-sans: var(--font-body);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--lv-white);
+  color: var(--lv-ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--lv-ink);
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--lv-sky);
+  color: var(--lv-navy);
+}
+
+:focus-visible {
+  outline: 2px solid var(--lv-sky);
+  outline-offset: 2px;
+}
+
+/* ---------- layout ---------- */
+
+.lv-container {
+  width: 100%;
+  max-width: var(--lv-container);
+  margin-inline: auto;
+  padding-inline: 15px;
+}
+
+.lv-skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 200;
+  background: var(--lv-navy);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--lv-radius);
+  font-size: 14px;
+  font-weight: 600;
+  transition: top 150ms ease;
+}
+.lv-skip-link:focus {
+  top: 12px;
+}
+
+/* ---------- header ---------- */
+
+.lv-header {
+  position: relative;
+  z-index: 100;
+  background: transparent;
+  height: var(--lv-header-h);
+  /* Reference #navbar is 88px tall with the nav text and header icons
+     vertically centred on the full 88px (text box y=33.5 h=21 => centre 44).
+     Vertical padding is therefore zero and the inner row fills the height. */
+  padding: 0 15px;
+}
+
+.lv-header--solid {
+  background: var(--lv-navy);
+}
+
+.lv-header__inner {
+  position: relative;
+  max-width: var(--lv-container);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.lv-brand {
+  position: absolute;
+  /* Reference .navbar-brand img sits at y=9 inside the 88px header. */
+  top: 9px;
+  left: 0;
+  display: block;
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
+/* Desktop crest: white artwork, 90x90, overlaps the header bottom edge. */
+.lv-brand__full {
+  width: 90px;
+  height: 90px;
+  display: block;
+}
+
+/* Mobile crest: navy artwork on the white header. Hidden on desktop. */
+.lv-brand__simple {
+  display: none;
+}
+
+.lv-header__utils {
+  display: flex;
+  align-items: center;
+  /* Reference: .navbar__right group is 60px wide (24 + 12 gap + 24) and its
+     right edge sits 16px inside the 1140px container. The trailing flex gap
+     already provides that 16px, so no extra padding is needed. */
+  gap: 12px;
+  flex: 0 0 auto;
+}
+
+.lv-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  cursor: default;
+  border-radius: var(--lv-radius);
+}
+
+/* ---------- desktop nav ---------- */
+
+.lv-nav {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  justify-content: flex-start;
+  /* The logo is absolutely positioned, so it contributes no flow width.
+     Reference site: collapse wrapper starts at x=240 (container 150 + logo 90)
+     and .navbar-nav has margin-left:75px => first nav item at x=315.
+     That is 165px from the container's left edge. */
+  padding-left: 165px;
+}
+
+.lv-nav__list {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lv-nav__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* Reference li is exactly the 21px line box of its <a>. */
+  height: 21px;
+}
+
+.lv-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  /* Reference .nav-link is a 21px line box vertically centred in the 88px
+     header (y=33.5). Keeping the real height makes the dropdown open at
+     y=54.5, exactly like the original site. The ::after below restores a
+     full-height pointer target without changing the measured geometry. */
+  height: 21px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 140ms ease;
+}
+
+.lv-nav__link::after {
+  content: "";
+  position: absolute;
+  inset: -33px 0;
+}
+
+.lv-nav__link:hover,
+.lv-nav__item[data-open="true"] > .lv-nav__link {
+  color: var(--lv-sky);
+}
+
+.lv-nav__link--active {
+  color: var(--lv-sky);
+}
+
+.lv-nav__toggle {
+  display: none;
+  width: 14px;
+  height: 14px;
+  opacity: 0.9;
+}
+
+.lv-nav__item[data-open="true"] .lv-nav__toggle-open,
+.lv-nav__item:not([data-open="true"]) .lv-nav__toggle-close {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .lv-nav__toggle {
+    display: block;
+  }
+}
+
+/* dropdown */
+
+/* dropdown — measurements taken from the live site (2026-10-22):
+   wrapper .dropdown__menu: position absolute, top 21px (li height), left 0,
+   padding 15px 0 0. Inner ul: white, radius 8px, no border,
+   shadow 2px 2px 26px rgba(0,0,0,.2), padding 20px 0, width 224px.
+   No caret. First item 34px tall, last item 21px. */
+
+.lv-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding: 15px 0 0;
+  z-index: 120;
+}
+
+.lv-dropdown__panel {
+  width: 224px;
+  background: #fff;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 2px 2px 26px rgba(0, 0, 0, 0.2);
+  padding: 20px 0;
+  margin: 0;
+  list-style: none;
+}
+
+.lv-dropdown__item {
+  display: block;
+  padding: 0 50px 13px 30px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: normal;
+  color: #000;
+  white-space: nowrap;
+  transition: color 120ms ease;
+}
+
+.lv-dropdown__item:hover {
+  color: var(--lv-sky);
+}
+
+/* Reference: the last dropdown item has no bottom padding, so the panel ends
+   at 333px instead of 346px (measured on the live site). */
+.lv-dropdown__panel > li:last-child .lv-dropdown__item {
+  padding-bottom: 0;
+}
+
+.lv-dropdown__item[aria-disabled="true"] {
+  cursor: default;
+}
+
+/* ---------- mobile nav ---------- */
+
+.lv-burger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 auto;
+  color: #fff;
+}
+
+.lv-mobile-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.lv-mobile-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--lv-border-mid);
+}
+
+.lv-mobile-panel__head img {
+  width: auto;
+  height: 44px;
+  object-fit: contain;
+}
+
+.lv-mobile-panel__close {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: none;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--lv-ink);
+  cursor: pointer;
+}
+
+.lv-mobile-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lv-mobile-nav__parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px;
+  border: 0;
+  border-bottom: 1px solid var(--lv-border-mid);
+  background: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--lv-ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.lv-mobile-nav__children {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 8px;
+  background: var(--lv-border);
+}
+
+.lv-mobile-nav__child {
+  display: block;
+  padding: 11px 16px 11px 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lv-ink);
+  border-bottom: 1px solid #eef1f3;
+}
+
+.lv-mobile-nav__child--active {
+  color: var(--lv-sky);
+  font-weight: 700;
+}
+
+/* ---------- buttons ---------- */
+
+.lv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 12px 27px;
+  border-radius: var(--lv-radius);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease,
+    opacity 150ms ease;
+}
+
+.lv-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lv-btn--primary {
+  background: var(--lv-sky);
+  border-color: var(--lv-sky);
+  color: var(--lv-navy);
+}
+.lv-btn--primary:hover:not(:disabled) {
+  background: var(--lv-sky-hover);
+  border-color: var(--lv-sky-hover);
+}
+
+.lv-btn--neutral {
+  background: var(--lv-grey);
+  border-color: var(--lv-grey);
+  color: #fff;
+}
+.lv-btn--neutral:hover:not(:disabled) {
+  background: var(--lv-grey-hover);
+  border-color: var(--lv-grey-hover);
+}
+
+.lv-btn--outline {
+  background: transparent;
+  border-color: var(--lv-border-mid);
+  color: var(--lv-navy);
+}
+.lv-btn--outline:hover:not(:disabled) {
+  border-color: var(--lv-navy);
+  background: var(--lv-border);
+}
+
+.lv-btn--sm {
+  min-height: 44px;
+  padding: 9px 18px;
+  font-size: 13px;
+}
+
+/* ---------- hero ---------- */
+
+.lv-hero {
+  position: relative;
+  background-color: #000;
+  background-image: url("/images/brand/site-texture.webp");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.lv-hero--home {
+  min-height: 705px;
+  margin-top: calc(var(--lv-header-h) * -1);
+  padding-top: var(--lv-header-h);
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-hero--home > .lv-hero__inner {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-hero--home .lv-container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.lv-hero--sm {
+  min-height: 320px;
+  margin-top: calc(var(--lv-header-h) * -1);
+  padding-top: var(--lv-header-h);
+  display: flex;
+  align-items: flex-end;
+}
+
+.lv-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 28, 58, 0.82) 0%,
+    rgba(0, 28, 58, 0.62) 45%,
+    rgba(0, 28, 58, 0.9) 100%
+  );
+}
+
+.lv-hero__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.lv-hero__inner--sm {
+  padding-bottom: 32px;
+}
+
+.lv-hero__heading {
+  font-family: var(--font-display);
+  font-size: 70px;
+  line-height: 60px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+}
+
+/* home slider */
+
+.lv-slider {
+  position: relative;
+  padding: 60px 0 96px;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lv-slide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  align-items: center;
+  gap: 48px;
+  flex: 1 1 auto;
+}
+
+.lv-slide__title {
+  font-family: var(--font-display);
+  font-size: 70px;
+  line-height: 60px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 28px;
+  max-width: 620px;
+}
+
+.lv-slide__media {
+  position: relative;
+  background: #ffffff;
+  border: 0;
+  aspect-ratio: 750 / 456;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+}
+
+.lv-slide__media-inner {
+  font-family: var(--font-display);
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: var(--lv-navy);
+}
+
+.lv-slide__media-sub {
+  margin-top: 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--lv-muted);
+}
+
+.lv-slider__dots {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+}
+
+.lv-slider__dot {
+  width: 34px;
+  height: 4px;
+  border: 0;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.lv-slider__dot[aria-current="true"] {
+  background: #fff;
+}
+
+/* ---------- footer ---------- */
+
+.lv-footer-banner {
+  background-color: var(--lv-navy);
+  background-image: url("/images/brand/site-texture.webp");
+  background-size: cover;
+  color: #fff;
+  padding: 96px 0 78px;
+}
+
+.lv-footer-banner hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  margin: 0 0 40px;
+}
+
+.lv-footer-banner h2,
+.lv-footer-banner__heading {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.lv-footer-banner__row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 10px 0;
+}
+
+.lv-footer-banner__flag {
+  flex: 0 0 100px;
+  width: 100px;
+}
+
+.lv-footer-banner__flag img {
+  width: 100%;
+  height: 25px;
+  object-fit: cover;
+  display: block;
+}
+
+.lv-footer-banner__row p {
+  font-size: 14px;
+  line-height: 1.71;
+  color: #fff;
+  margin: 0;
+}
+
+.lv-footer-banner__link {
+  display: block;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  padding-top: 20px;
+  cursor: default;
+}
+
+.lv-footer {
+  background: var(--lv-navy);
+  padding: 28px 0;
+}
+
+.lv-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.lv-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 22px;
+}
+
+.lv-footer__links span {
+  font-size: 12px;
+  color: #fff;
+  cursor: default;
+  padding: 4px 0;
+}
+
+.lv-footer__social {
+  display: flex;
+  gap: 6px;
+}
+
+.lv-footer__social span {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  opacity: 0.9;
+}
+
+/* ---------- generic page section ---------- */
+
+.lv-section {
+  padding: 56px 0 64px;
+}
+
+.lv-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--lv-muted);
+}
+
+.lv-h2 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -0.6px;
+  color: var(--lv-navy);
+}
+
+.lv-h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--lv-ink);
+}
+
+/* ---------- forms ---------- */
+
+.lv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lv-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lv-ink);
+}
+
+.lv-label__req {
+  color: var(--lv-error);
+  margin-left: 3px;
+}
+
+.lv-input,
+.lv-select,
+.lv-textarea {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 14px;
+  border: 1px solid var(--lv-border-mid);
+  border-radius: var(--lv-radius);
+  background: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--lv-ink);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+.lv-textarea {
+  min-height: 108px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.lv-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235b6570' d='M1.4 0 6 4.6 10.6 0 12 1.4 6 7.4 0 1.4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+}
+
+.lv-input:focus,
+.lv-select:focus,
+.lv-textarea:focus {
+  outline: none;
+  border-color: var(--lv-sky);
+  box-shadow: 0 0 0 3px rgba(74, 183, 243, 0.15);
+}
+
+.lv-input[aria-invalid="true"],
+.lv-select[aria-invalid="true"],
+.lv-textarea[aria-invalid="true"] {
+  border-color: var(--lv-error);
+}
+
+.lv-input[aria-invalid="true"]:focus,
+.lv-select[aria-invalid="true"]:focus,
+.lv-textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.14);
+}
+
+.lv-error-text {
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--lv-error);
+}
+
+.lv-hint {
+  font-size: 12px;
+  color: var(--lv-muted);
+}
+
+/* ---------- utility ---------- */
+
+.lv-spin {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: lv-spin 0.7s linear infinite;
+  flex: 0 0 auto;
+}
+
+@keyframes lv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .lv-spin {
+    animation-duration: 1.6s;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1239px) {
+  :root {
+    --lv-container: 960px;
+  }
+}
+
+@media (max-width: 991px) {
+  :root {
+    --lv-container: 720px;
+  }
+  .lv-nav {
+    display: none;
+  }
+  .lv-header__utils {
+    display: none;
+  }
+  .lv-burger {
+    display: inline-flex;
+  }
+  .lv-header {
+    background: #fff;
+    position: relative;
+    height: 64px;
+    padding: 0 8px;
+    margin-top: 0;
+    border-bottom: 1px solid var(--lv-border-mid);
+  }
+  .lv-header--solid {
+    background: #fff;
+  }
+  .lv-header__inner {
+    justify-content: space-between;
+    position: relative;
+    height: 100%;
+  }
+  .lv-burger {
+    color: var(--lv-ink);
+    order: 0;
+  }
+  .lv-brand {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* The white desktop crest is invisible on the white mobile header, so the
+     navy secondary crest replaces it. Natural ratio is 66x84. */
+  .lv-brand__full {
+    display: none;
+  }
+  .lv-brand__simple {
+    display: block;
+    width: auto;
+    height: 44px;
+    object-fit: contain;
+  }
+  .lv-hero__inner {
+    padding-bottom: 36px;
+  }
+  .lv-header__spacer {
+    width: 40px;
+  }
+  .lv-hero--home,
+  .lv-hero--sm {
+    margin-top: 0;
+    padding-top: 0;
+  }
+  .lv-hero--home {
+    min-height: 620px;
+  }
+  .lv-slide {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .lv-slide__title,
+  .lv-hero__heading {
+    font-size: 46px;
+    line-height: 44px;
+    letter-spacing: -1.4px;
+  }
+  .lv-slider {
+    padding: 40px 0 80px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --lv-container: 100%;
+  }
+  .lv-slide__title,
+  .lv-hero__heading {
+    font-size: 38px;
+    line-height: 36px;
+    letter-spacing: -1.1px;
+  }
+  .lv-hero__heading {
+    font-size: 40px;
+    line-height: 38px;
+  }
+  .lv-hero--sm {
+    min-height: 240px;
+  }
+  .lv-footer-banner {
+    padding: 56px 0 48px;
+  }
+  .lv-footer-banner__row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .lv-footer-banner__flag {
+    flex: 0 0 auto;
+    width: 100px;
+  }
+  .lv-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .lv-section {
+    padding: 40px 0 48px;
+  }
+  .lv-h2 {
+    font-size: 24px;
+  }
 }

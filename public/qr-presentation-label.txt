@@ -1,0 +1,13 @@
+Lacrosse Victoria — Find a Club (prototype)
+
+URL:    https://2a38-103-179-248-121.ngrok-free.app/participate/find-a-club
+Source: ngrok (127.0.0.1:4040)
+Image:  /home/about-you/Documents/Development/SanDevID/victoria/public/qr-presentation.png
+
+Cara pakai saat presentasi:
+1. Pastikan tunnel ngrok masih berjalan (kalau tunnel mati, URL mati).
+2. Tampilkan gambar QR ini di slide.
+3. Peserta scan pakai kamera HP -> langsung masuk ke halaman Find a Club.
+4. Kalau halaman menampilkan peringatan ngrok, ketuk "Visit Site".
+
+Catatan: QR ini hanya valid selama URL di atas aktif.
